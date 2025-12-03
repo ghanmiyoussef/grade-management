@@ -24,9 +24,9 @@ jobs:
           php-version: '8.2' # ou la version que tu utilises
 
       # 3️⃣ Installer Composer (si tu utilises Composer)
-      - name: Install Composer dependencies
-        run: composer install --no-progress --prefer-dist
-        working-directory: ./ # mettre le dossier où se trouve ton composer.json
+      #- name: Install Composer dependencies
+       # run: composer install --no-progress --prefer-dist
+        #working-directory: ./ # mettre le dossier où se trouve ton composer.json
 
       # 4️⃣ Se connecter à Docker Hub avec les secrets
       - name: Login to Docker Hub
