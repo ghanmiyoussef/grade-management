@@ -26,8 +26,8 @@ jobs:
           ini-values: post_max_size=256M, upload_max_filesize=256M
 
       # 3️⃣ Installer Composer
-      - name: Install Composer dependencies
-        run: composer install --no-progress --no-suggest --prefer-dist
+      #- name: Install Composer dependencies
+       # run: composer install --no-progress --no-suggest --prefer-dist
 
       # 4️⃣ Exécuter les tests (si tu en as)
       - name: Run PHP Unit tests
