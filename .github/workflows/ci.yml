@@ -44,3 +44,13 @@ jobs:
       - name: Push Docker image
         run: |
           docker push josef90/grade-management:latest
+    # 8️⃣ Déploiement automatique sur serveur distant (SSH)
+     # - name: Deploy to Server
+      #  uses: appleboy/ssh-action@v0.1.6
+       # with:
+        #  host: ${{ secrets.SERVER_IP }}
+         # username: ${{ secrets.SERVER_USER }}
+          #key: ${{ secrets.SERVER_SSH_KEY }}
+          #script: |
+           # docker pull ${{ secrets.DOCKER_USERNAME }}/grade-management:latest
+            #docker-compose up -d
