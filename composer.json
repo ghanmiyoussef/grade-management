@@ -1,5 +1,5 @@
 {
-    "name": "youssef/grade-management",
-    "description": "Calculateur de moyenne pour étudiants",
-    "require": {}
+  "require": {
+    "phpmailer/phpmailer": "^6.8"
+  }
 }
