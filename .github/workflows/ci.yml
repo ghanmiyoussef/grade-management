@@ -32,13 +32,11 @@ jobs:
           vendor/bin/phpunit --log-junit test-reports/results.xml
 
       # 4️⃣ Publier les rapports de tests
-      - name: Upload test report
-        uses: actions/upload-artifact@v4
+      - name: Upload Test Report
+        uses: actions/upload-artifact@v3
         with:
-            name: test-report
-            path: report.txt
-
-    
+          name: test-report
+          path: test-reports/results.xml
 
       # 5️⃣ Build de l’image Docker
       - name: Build Docker image
@@ -56,12 +54,12 @@ jobs:
         run: docker push ${{ secrets.DOCKER_USERNAME }}/grade-management:latest
 
       # 8️⃣ Déploiement automatique sur serveur distant (SSH)
-      #- name: Deploy to Server
-       # uses: appleboy/ssh-action@v0.1.6
-        #with:
-         # host: ${{ secrets.SERVER_IP }}
-          #username: ${{ secrets.SERVER_USER }}
-          #key: ${{ secrets.SERVER_SSH_KEY }}
-          #script: |
-           # docker pull ${{ secrets.DOCKER_USERNAME }}/grade-management:latest
-            #docker-compose up -d
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            docker pull ${{ secrets.DOCKER_USERNAME }}/grade-management:latest
+            docker-compose up -d
