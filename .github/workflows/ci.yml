@@ -13,14 +13,13 @@ jobs:
     steps:
       # 1. Checkout du code
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       # 2. Installer PHP + Composer
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2"
-          extensions: mbstring, pdo, pdo_mysql
+          php-version: '8.1'
           coverage: none
 
       - name: Install Composer dependencies
@@ -52,6 +51,6 @@ jobs:
       # 7. Push vers Docker Hub
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/grade-management:latest
-#ff
+
 
 
