@@ -1,65 +1,46 @@
 name: CI/CD Pipeline
 
-# Déclenche le workflow sur push ou PR sur la branche main
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
-  build-test-deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Récupérer le code du repo
+      # 1️⃣ Récupérer le code
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2️⃣ Installer PHP et Composer
+      # 2️⃣ Installer PHP (si besoin pour Composer)
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'  # Ajuste selon ta version
+          php-version: '8.2' # ou la version que tu utilises
 
-      - name: Install Composer dependencies
-        run: composer install --no-progress --prefer-dist
+      # 3️⃣ Installer Composer (si tu utilises Composer)
+      #- name: Install Composer dependencies
+       # run: composer install --no-progress --prefer-dist
+        #working-directory: ./ # mettre le dossier où se trouve ton composer.json
 
-      # 3️⃣ Lancer les tests PHP (ex: PHPUnit)
-      - name: Run Tests
-        run: |
-          mkdir -p test-reports
-          vendor/bin/phpunit --log-junit test-reports/results.xml
-
-      # 4️⃣ Publier les rapports de tests
-      - name: Upload Test Report
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-report
-          path: test-reports/results.xml
-
-      # 5️⃣ Build de l’image Docker
-      - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/grade-management:latest .
-
-      # 6️⃣ Login Docker Hub
-      - name: Log in to Docker Hub
+      # 4️⃣ Se connecter à Docker Hub avec les secrets
+      - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # 7️⃣ Push de l’image Docker
-      - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/grade-management:latest
+      # 5️⃣ Build de l'image Docker
+      - name: Build Docker image
+        run: |
+          docker build -t josef90/grade-management:latest .
 
-      # 8️⃣ Déploiement automatique sur serveur distant (SSH)
-      - name: Deploy to Server
-        uses: appleboy/ssh-action@v0.1.6
-        with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          script: |
-            docker pull ${{ secrets.DOCKER_USERNAME }}/grade-management:latest
-            docker-compose up -d
+      # 6️⃣ Push de l'image sur Docker Hub
+      - name: Push Docker image
+        run: |
+          docker push josef90/grade-management:latest
